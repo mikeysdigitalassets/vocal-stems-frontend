@@ -4,31 +4,59 @@ import axios from 'axios';
 const Home = () => {
   const [youtubeUrl, setYoutubeUrl] = useState<string>('');
   const [processing, setProcessing] = useState<boolean>(false);
+  const [vocalsChecked, setVocalsChecked] = useState<boolean>(true); // default checked, no longer doing types
+  // const [instrumentalsChecked, setInstrumentalsChecked] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setProcessing(true);
-    setErrorMessage(null);
+  e.preventDefault();
+  setProcessing(true);
+  setErrorMessage(null);
 
-    try {
-      const response = await axios.post('http://localhost:5000/api/isolate-vocals', { url: youtubeUrl },
-        {withCredentials: true}
-      );
-      const downloadLink = response.data.downloadUrl;
-      window.location.href = downloadLink;
-    } catch (error: any) {
-      setErrorMessage('Failed to process the URL.');
-    } finally {
-      setProcessing(false);
-    }
-  };
+  // no longer doing checkboxes
+  // if (!vocalsChecked && !instrumentalsChecked) {
+  //   setErrorMessage('Please select at least one option: Vocals or Instrumentals.');
+  //   setProcessing(false);
+  //   return;
+  // }
+
+  try {
+    // no longer having type options, just leaving here so i dont have to refactor
+    const types = [];
+    if (vocalsChecked) types.push('vocals');
+    // if (instrumentalsChecked) types.push('instrumentals'); -> no longer doing types
+
+    const response = await axios.post(
+      'http://localhost:5000/api/isolate-vocals',
+      { url: youtubeUrl, types },
+      { withCredentials: true, responseType: 'blob' } // set response type to 'blob' to handle binary data
+    );
+
+    // create a blob from the response
+    const blob = new Blob([response.data], { type: 'audio/wav' });
+    const downloadUrl = window.URL.createObjectURL(blob);
+
+    // create a temporary link to download the file
+    const link = document.createElement('a');
+    link.href = downloadUrl;
+    link.setAttribute('download', 'isolated_track.wav'); // Set the file name
+    document.body.appendChild(link);
+    link.click();
+    link.remove(); // Clean up
+
+  } catch (error: any) {
+    setErrorMessage('Failed to process the URL.');
+  } finally {
+    setProcessing(false);
+  }
+};
+
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
         {/* support Ukraine  */}
-      <div className="mt-12 lg:mt-0 lg:ml-8 flex flex-col items-center">
+      <div className="mt-12 lg:mt-0 lg:ml-0 flex flex-col items-center">
         <div className="ukraine mb-4">
           <a href="https://war.ukraine.ua/support-ukraine/">
             <svg
@@ -62,10 +90,10 @@ const Home = () => {
         <div>
           <h1 className="text-4xl font-extrabold text-center text-gray-900">Isolate track vocals!</h1>
           <p className="mt-2 text-center text-sm text-gray-600">
-            Enter a YouTube URL to isolate the vocals from the song.
+            Enter a YouTube URL to isolate the vocals from a song.
           </p>
         </div>
-
+        
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div className="rounded-md shadow-sm -space-y-px">
             <div>
@@ -84,6 +112,8 @@ const Home = () => {
               />
             </div>
           </div>
+
+          
 
           <div>
             <button
@@ -104,9 +134,8 @@ const Home = () => {
           )}
         </form>
       </div>
-      
     </div>
   );
-}
+};
 
 export default Home;

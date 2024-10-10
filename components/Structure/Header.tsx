@@ -26,13 +26,13 @@ const Header = () => {
         
         <nav className="flex space-x-6 ml-8">
           
-          {/* will add visibilty of links depending on user status user and !user */ }
+          
           <Link href="/" className="hover:text-gray-400">
             Home
           </Link>
-          <Link href="/about" className="hover:text-gray-400">
+          {/* <Link href="/about" className="hover:text-gray-400">
             About
-          </Link>
+          </Link> */}
          
         </nav>
 
