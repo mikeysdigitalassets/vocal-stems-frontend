@@ -27,7 +27,7 @@ const Home = () => {
     // if (instrumentalsChecked) types.push('instrumentals'); -> no longer doing types
 
     const response = await axios.post(
-      'https://www.vocal-stems.com/api/isolate-vocals',
+      'https://18.214.117.84/api/isolate-vocals',
       { url: youtubeUrl, types },
       { withCredentials: true, responseType: 'blob' } // set response type to 'blob' to handle binary data
     );
