@@ -4,7 +4,7 @@ import axios from 'axios';
 const Home = () => {
   const [youtubeUrl, setYoutubeUrl] = useState<string>('');
   const [processing, setProcessing] = useState<boolean>(false);
-  const [vocalsChecked, setVocalsChecked] = useState<boolean>(true); // default checked, no longer doing types
+  const [vocalsChecked] = useState<boolean>(true); // default checked, no longer doing types
   // const [instrumentalsChecked, setInstrumentalsChecked] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -27,7 +27,7 @@ const Home = () => {
     // if (instrumentalsChecked) types.push('instrumentals'); -> no longer doing types
 
     const response = await axios.post(
-      'http://localhost:5000/api/isolate-vocals',
+      'https://www.vocal-stems.com/api/isolate-vocals',
       { url: youtubeUrl, types },
       { withCredentials: true, responseType: 'blob' } // set response type to 'blob' to handle binary data
     );
@@ -44,7 +44,7 @@ const Home = () => {
     link.click();
     link.remove(); // Clean up
 
-  } catch (error: any) {
+  } catch  {
     setErrorMessage('Failed to process the URL.');
   } finally {
     setProcessing(false);

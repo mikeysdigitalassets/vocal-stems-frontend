@@ -1,5 +1,5 @@
 import React from "react";
-import Home from '../components/Structure/Home'
+
 import type { AppProps } from 'next/app';
 import '../globals.css';
 import Header from "@/components/Structure/Header";

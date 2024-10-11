@@ -1,20 +1,19 @@
-import React, { useState } from "react";
+import React from "react";
 import Link from "next/link"; 
-import axios from "axios";
-import { useRouter } from "next/router"; 
 
-import { toast, ToastOptions, TypeOptions } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+
+// import { toast, ToastOptions, TypeOptions } from 'react-toastify';
+// import 'react-toastify/dist/ReactToastify.css';
 
 
 
 const Header = () => {
   
   
-  const notify = (message: string, type: TypeOptions) => {
-    const options: ToastOptions = { type, autoClose: 5000};
-    toast(message, options);
-  }
+  // const notify = (message: string, type: TypeOptions) => {
+  //   const options: ToastOptions = { type, autoClose: 5000};
+  //   toast(message, options);
+  // }
 
  
    return (
